@@ -1,6 +1,6 @@
 /*
 Code for Excercise 01 of ExercisesInC.
-Joey L. Maalouf, 2017
+Joey L. Maalouf, Spring 2017
 */
 
 #include <stdio.h>
