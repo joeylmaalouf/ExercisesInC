@@ -150,27 +150,47 @@ character at a time. This optimization is made easier if the length of the strin
 
 1) Which memory management functions would you expect to take constant time? Which ones take time proportional to the size of the allocated chunk?
 
+* Constant: `free`
+
+* Proportional: `malloc` (proportional to number of free chunks), `calloc` (proportional to number and size of free chunks), `realloc` (proportional to size of old chunks)
+
 2) For each of the following memory errors, give an example of something that might go wrong:
 
 a) Reading from unallocated memory.
 
+Reads an arbitrary value from the location, or segfault.
+
 b) Writing to unallocated memory.
+
+Overwrites whatever was at the location, or segfault.
 
 c) Reading from a freed chunk.
 
+Possibly nothing, possibly (a).
+
 d) Writing to a freed chunk.
 
+Possibly nothing, possibly (b).
+
 e) Failing to free a chunk that is no longer needed.
+
+Memory leak; system could eventually run out of memory, causing `malloc` to fail and most things to crash.
 
 
 3) Run
 
-  ps aux --sort rss
+`ps aux --sort rss`
 
 to see a list of processes sorted by RSS, which is "resident set size", the amount of physical 
 memory a process has. Which processes are using the most memory?
 
+* `chrome`
+* `compiz`
+* `sublime_text`
+
 4) What's wrong with allocating a large number of small chunks? What can you do to mitigate the problem?
+
+There's a non-trivial amount of overhead attached to each chunk, so it wouldn't be very space efficient. To fix this, we can use arrays instead.
 
 If you want to know more about how malloc works, read 
 [Doug Lea's paper about dlmalloc](http://gee.cs.oswego.edu/dl/html/malloc.html)
