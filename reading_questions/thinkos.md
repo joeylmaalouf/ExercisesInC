@@ -41,13 +41,23 @@ Reading from or writing to an invalid location in memory.
 
 1) Give a real-world example of virtualization (ideally not one of the ones in the book).
 
+When I go on Amazon, all I see is a list of products, but not all of these items are sold by Amazon themselves; a lot are sold by third-party retailers. I don't necessarily care about who actually made the products, because they all get routed through Amazon for me to buy.
+
 2) What is the difference between a program and a process?
+
+A process is an environment that runs a program in isolation. A program is just text/code, whereas a process contains the program, data, states, etc.
 
 3) What is the primary purpose of the process abstraction? What illusion does the process abstraction create?
 
+It allows programmers to write code without worrying about things like interruptions or offset memory; the OS uses abstraction to create the illusion of an uninterrupted process with dedicated memory.
+
 4) What is the kernel?
 
+The OS core, which controls important operations like threading.
+
 5) What is a daemon?
+
+A background process that runs OS services.
  
 
 ## Chapter 3
