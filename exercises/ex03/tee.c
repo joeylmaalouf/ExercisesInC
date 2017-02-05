@@ -3,7 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-void read_args (int argc, char* argv[], int* append_output, int* ignore_interrupts, /* char* error_mode, */ int* file_indices, int* num_files) {
+/* read_args: reads and parses the provided flags and arguments
+ * argc: integer number of arguments provided
+ * argv: array of strings representing the actual arguments
+ * append_output: flag for appending to files rather than overwriting
+ * ignore_interrupts: flag for ignoring interrupt signals
+ * error_mode: string describing what behavior to use if there are output problems
+ * file_indices: integer array holding the indices of which args are output files
+ * num_files: the corresponding count of how many files there are to write to
+ * returns: nothing
+*/
+void read_args (int argc, char* argv[], int* append_output, int* ignore_interrupts,
+                /* char* error_mode, */ int* file_indices, int* num_files) {
   int i, j;
   for (i = 1; i < argc; ++i) {
     if (argv[i][0] == '-') {
@@ -49,6 +60,11 @@ void read_args (int argc, char* argv[], int* append_output, int* ignore_interrup
   }
 }
 
+/* tee: reads input from stdin and writes it to stdout and any given files
+ * out_files: array of file pointers to the output files for writing
+ * num_files: integer count of how many files there are to write to
+ * returns: nothing
+*/
 void tee (FILE** out_files, int* num_files) {
   char c;
   int i;
@@ -64,6 +80,11 @@ void tee (FILE** out_files, int* num_files) {
   }
 }
 
+/* main: parses input flags and outfiles, sets them up for teeing, and cleans up after
+* argc: integer number of arguments provided
+* argv: array of strings representing the actual arguments
+ * returns: exit code
+*/
 int main (int argc, char* argv[]) {
   int append_output = 0;
   int ignore_interrupts = 0;
@@ -72,7 +93,8 @@ int main (int argc, char* argv[]) {
   int num_files = 0;
   FILE** out_files;
   int i;
-  read_args(argc, argv, &append_output, &ignore_interrupts, /* error_mode, */ file_indices, &num_files);
+  read_args(argc, argv, &append_output, &ignore_interrupts,
+            /* error_mode, */ file_indices, &num_files);
 
   if (ignore_interrupts) {
     signal(SIGINT, SIG_IGN);
