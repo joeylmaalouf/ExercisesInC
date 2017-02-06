@@ -1,3 +1,9 @@
+/*
+Code for Excercise 03 of ExercisesInC.
+Joey L. Maalouf, Spring 2017
+*/
+
+#include <errno.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,12 +114,14 @@ int main (int argc, char* argv[]) {
   for (i = 0; i < num_files; ++i) {
     out_files[i] = fopen(argv[file_indices[i]], append_output ? "a" : "w");
     if (out_files[i] == NULL) {
-      if (strstr(error_mode, "exit") != NULL) {
-        fprintf(stderr, "Error: failed to open file: %s\n", argv[file_indices[i]]);
-        exit(1);
-      }
-      else if (strstr(error_mode, "warn") != NULL) {
-        fprintf(stderr, "Warning: failed to open file: %s\n", argv[file_indices[i]]);
+      if ((errno != EPIPE) || (strstr(error_mode, "nopipe") == NULL)) {
+        if (strstr(error_mode, "exit") != NULL) {
+          fprintf(stderr, "Error: failed to open: %s\n", argv[file_indices[i]]);
+          exit(1);
+        }
+        else if (strstr(error_mode, "warn") != NULL) {
+          fprintf(stderr, "Warning: failed to open: %s\n", argv[file_indices[i]]);
+        }
       }
     }
   }
