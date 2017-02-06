@@ -22,6 +22,68 @@ Beyond that misunderstanding, I think we used EduScrum fairly effectively; the s
 
 ##### Exam Question
 
-Q: ????
+Question:
 
-A: ????
+The following code contains 3 errors. For each error, state what's going wrong, when it would affect the program (compile- or run-time), and how to fix it.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+/* reverses the first n elements in arr */
+void reverse (int* arr, int n) {
+  int i = 0;
+  int j = n - 1;
+  int tmp;
+  while (i < j) {
+    tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+    ++i;
+    --j;
+  }
+}
+
+int main (int argc, char* argv[]) {
+  int count, i;
+  int arr;
+
+  printf("Enter the length of the integer array:\n");
+  scanf("%d", &count);
+  arr = calloc(count, sizeof(int));
+  if (arr == NULL)
+    fprintf(stderr, "Error: failed to allocate enough memory.\n");
+    return 1;
+
+  printf("Enter the elements of the array, separated by spaces:\n");
+  for (i = 0; i < count; ++i) {
+    scanf("%d", &arr[i]);
+  }
+
+  reverse(arr, count);
+
+  for (i = 0; i < count; ++i) {
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+
+  return 0;
+}
+```
+
+Answer:
+
+1. Line 20.
+  * What should be a pointer to an array is declared as just a single integer.
+  * Compile-time (errors and warnings).
+  * Change `int arr;` to `int* arr;`.
+
+2. Lines 54-56.
+  * The return statement isn't included inside the conditional block.
+  * Run-time (return early).
+  * Add curly brackets around lines 55 and 56.
+
+3. Lines 24, 42.
+  * The program doesn't free the allocated memory.
+  * Run-time (memory leak).
+  * Add `free(arr);` above `return 0;`.
