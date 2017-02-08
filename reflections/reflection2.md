@@ -15,6 +15,7 @@
 ##### ThinkOS Reading Questions
 
 * [Chapter 3](../reading_questions/thinkos.md#chapter-3)
+* [Chapter 4](../reading_questions/thinkos.md#chapter-4)
 * [Chapter 6](../reading_questions/thinkos.md#chapter-6)
 
 ##### Exam Question

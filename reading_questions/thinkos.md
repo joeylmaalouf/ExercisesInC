@@ -137,19 +137,41 @@ How much space is there between them? Hint: Google knows how to subtract hexadec
 1) What abstractions do file systems provide? Give an example of something that is logically
 true about files systems but not true of their implementations.
 
+File systems allow programmers to have a consistent abstraction of how the files are stored, for more convenient access. File systems themselves use bytes, whereas their implementations convert that to block-based storage.
+
 2) What information do you imagine is stored in an `OpenFileTableEntry`?
 
+* address of file
+* file's open mode flag
+* current position in file
+
 3) What are some of the ways operating systems deal with the relatively slow performance of persistent storage?
+
+* switch over to working on other processes while they wait
+* predictively pre-fetch blocks into memory to save later calls
+* use a cache/buffer to minimize the number of times they read from/write to storage
 
 4) Suppose your program writes a file and prints a message indicating that it is done writing.
 Then a power cut crashes your computer. After you restore power and reboot the computer, you find that the
 file you wrote is not there. What happened?
 
+The data was likely in a buffer, ready to be written to file, but the power cut came before the buffer contents were actually transferred to disk.
+
 5) Can you think of one advantage of a File Allocation Table over a UNIX inode? Or an advantage of a inode over a FAT?
+
+* FAT > inode: easier to add/remove blocks at the end of a file (pointed to by the last in the list), for when the contents grow/shrink
+* inode > FAT: less likely to lose the rest of a file if one block is corrupted
 
 6) What is overhead? What is fragmentation?
 
+Storage overhead is space used to store the data structures that hold metadata and other non-content information. Fragmentation is when blocks are left partially or fully unused, wasting the excess space.
+
 7) Why is the "everything is a file" principle a good idea? Why might it be a bad idea?
+
+Good:
+* it makes programming consistent for files, pipes, stdin/stdout, sockets, etc.
+Bad:
+* it could hide or abstract away information that might be important or useful for working with individual structures that aren't actually files
 
 If you would like to learn more about file systems, a good next step is to learn about journaling file systems.
 Start with [this Wikipedia article](https://en.wikipedia.org/wiki/Journaling_file_system), then
