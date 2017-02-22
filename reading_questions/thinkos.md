@@ -169,8 +169,11 @@ Storage overhead is space used to store the data structures that hold metadata a
 7) Why is the "everything is a file" principle a good idea? Why might it be a bad idea?
 
 Good:
+
 * it makes programming consistent for files, pipes, stdin/stdout, sockets, etc.
+
 Bad:
+
 * it could hide or abstract away information that might be important or useful for working with individual structures that aren't actually files
 
 If you would like to learn more about file systems, a good next step is to learn about journaling file systems.
