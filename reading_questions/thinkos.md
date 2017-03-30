@@ -297,23 +297,39 @@ If you want to know more about how malloc works, read
 
 1) What happens if a program writes a new value into the program counter?
 
+The execution jumps to another place in the program.
+
 2) What is the fundamental problem caches are meant to solve?
 
-3) If cache access time is 1 ns and memory access time is 10 ns, what is the average
-access time of a program with hit rate 50%? How about 90%?
+The "memory bottleneck", which refers to the fact that it can take many times longer to actually execute instructions than the rate at which a CPU can read them.
+
+3) If cache access time is 1 ns and memory access time is 10 ns, what is the average access time of a program with hit rate 50%? How about 90%?
+
+* 50: (0.5 \* 1) + (0.5 \* 10) = 5.5 ns
+* 90: (0.9 \* 1) + (0.1 \* 10) = 1.9 ns
 
 4) The book gives several examples of programming language features, like loops, that tend
 to improve locality in the access pattern of instructions and/or data. Can you think of other examples?
 Or counter-examples that might decrease locality?
 
+Locality might be decreased if a program has a lot of jumps and branches.
+
 5) If you refactor a program to improve locality, would you say the program is "cache aware"? Why not?
+
+It depends. If the refactoring explicitly unrolls a loop into chunks matching the block/cache sizes (hardware-specific stuff), I would say yes. However, if the refactoring was just generic locality optimization, I would say no.
 
 6) See if you can estimate the cost of a memory cache by comparing the prices of two similar CPUs with
 different cache sizes.
 
+About $100 for 4 MiB? It was hard to find a proper comparison.
+
 7) Why are cache policies generally more complex at the bottom of the memory hierarchy?
 
+Access times are slower, so policies need to be more complicated and optimized to make every one count.
+
 8) Can you think of a strategy operating systems could use to avoid thrashing or recover when it occurs?
+
+Prevent processes from spawning or running if pages are getting replaced/reloaded too often in a short timespan.
 
 Run the cache code on your laptop or another computer and see if you can infer the cache size and block size.
 If you can find the technical specifications for your computer, see if your inferences are right.
@@ -322,6 +338,7 @@ If you can find the technical specifications for your computer, see if your infe
 
 2) Run `python graph_data.py` to see the results. What can you infer about the cache structure on your computer?
 
+2 or 4 MiB in size.
 
 ## Chapter 8
 
