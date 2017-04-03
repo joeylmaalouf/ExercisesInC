@@ -124,5 +124,6 @@ Initially, the children end up with the same values in their heap/static
 segments as the parent. This is because when the parent process is forked,
 the child becomes an exact copy, including things like memory segments.
 However, because it is a copy, these segments are actually located in
-different places in memory for the parent and children.
+different places in physical memory for the parent and children, despite
+having the same virtual address.
 */
