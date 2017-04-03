@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
   /* parent continues */
   printf("Hello from the parent.\n");
   char* x = malloc(sizeof(char)); /* checking heap memory location */
-  static char y = 'a'; /* checking stack memory location */
+  static char y = 'a'; /* checking static memory location */
   printf("Parent put x in the heap at %p and y in static at %p.\n",
          x, &y);
   free(x);
