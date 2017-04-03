@@ -120,7 +120,9 @@ children to run their code, with child 0 printing and exiting instantly, child
 seconds (so 1 second after child 1), etc.
 
 2.
-Yes, the children end up with the same heap/static segments as the parent.
-This is because when the parent process is forked, the child becomes an exact
-copy, including things like memory segments.
+Initially, the children end up with the same values in their heap/static
+segments as the parent. This is because when the parent process is forked,
+the child becomes an exact copy, including things like memory segments.
+However, because it is a copy, these segments are actually located in
+different places in memory for the parent and children.
 */
