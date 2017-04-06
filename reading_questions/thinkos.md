@@ -389,16 +389,27 @@ As you read Chapter 9, you should compile and run the example code. By the natur
 
 1) Why does each thread have its own stack?
 
-2) What does the `gcc flag -lpthread` do?
+So that different threads can call the same functions without breaking each other.
+
+2) What does the `gcc` flag `-lpthread` do?
+
+Links to the `pthread` library during compilation.
 
 3) What does the argument of `pthread_exit` do?
 
+Gets passed to the thread that joins to the current one (usually the parent thread).
+
 4) Normally the same thread that created a thread also waits to join it. What happens if another thread tries to join a thread it did not create?
+
+It will just end up waiting for the other thread to complete.
 
 5) What goes wrong if several threads try to increment a shared integer at the same time?
 
+There's no guarantee that they won't read and write to an outdated version of the shared variable.
+
 6) What does it mean to "lock a mutex"?
 
+It blocks any other threads that are trying to access it until the current one is finished.
 
 
 ## Chapter 10
