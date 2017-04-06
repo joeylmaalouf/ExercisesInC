@@ -347,16 +347,37 @@ If you can find the technical specifications for your computer, see if your infe
 
 1) What is the kernel's most basic task?
 
+To handle interrupts.
+
 2) When an interrupt occurs, what part of the hardware state is saved by hardware?
+
+The program counter and flag/data registers.
 
 3) What is the difference between an interrupt and a context switch?
 
+An interrupt eventually returns to the original process, while a context switch just moves on to a new one.
+
 4) Give an example of an event that might cause a process to move from the blocked to the ready state.
+
+A non-immediate system call finishes.
 
 5) Why might a scheduler want to give higher priority to an I/O bound process?
 
+Users like responsive programs, and the overall speed of the program will be limited by the input anyway.
+
 When I make French toast, I usually make a batch of 12 slices. But my griddle only has room for 8 slices. Each piece of toast has to cook for 5 minutes on each side. How can I schedule 12 slices onto 8 "cores" to minimize the elapsed time to cook all 12 slices? (Note: this question is not hypothetical; this is really how I make French toast.)
 
+* put slices 1-8 on
+* wait 5 minutes
+* flip slices 1-4
+* remove slices 5-8
+* put slices 9-12 on
+* wait 5 minutes
+* remove slices 1-4
+* put slices 5-8 back on (flipped)
+* flip slices 9-12
+* wait 5 minutes
+* done
 
 
 ## Chapter 9
