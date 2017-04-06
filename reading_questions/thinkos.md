@@ -374,8 +374,8 @@ When I make French toast, I usually make a batch of 12 slices. But my griddle on
 * put slices 9-12 on
 * wait 5 minutes
 * remove slices 1-4
-* put slices 5-8 back on (flipped)
-* flip slices 9-12
+* put slices 5-8 on
+* flip slices 5-12
 * wait 5 minutes
 * done
 
