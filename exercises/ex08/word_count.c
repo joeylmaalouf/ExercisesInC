@@ -1,3 +1,8 @@
+/*
+Code for Excercise 08 of ExercisesInC.
+Joey L. Maalouf, Spring 2017
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
