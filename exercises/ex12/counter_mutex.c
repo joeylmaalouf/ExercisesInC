@@ -1,5 +1,6 @@
 /*     This file contains an example program from The Little Book of
        Semaphores, available from Green Tea Press, greenteapress.com
+       Modified to use a mutex for synchronization. - Joey L. Maalouf
 
        Copyright 2014 Allen B. Downey
        License: Creative Commons Attribution-ShareAlike 3.0
@@ -80,6 +81,7 @@ typedef struct {
     int counter;
     int end;
     int *array;
+    Semaphore *mutex;
 } Shared;
 
 /*  make_shared
@@ -102,6 +104,8 @@ Shared *make_shared (int end)
     for (i=0; i<shared->end; i++) {
         shared->array[i] = 0;
     }
+
+    shared->mutex = make_semaphore(1);
     return shared;
 }
 
@@ -154,10 +158,12 @@ void join_thread (pthread_t thread)
  */
 void child_code (Shared *shared)
 {
+    sem_wait(shared->mutex);
     // printf ("Starting child at counter %d\n", shared->counter);
 
     while (1) {
 	    if (shared->counter >= shared->end) {
+          sem_signal(shared->mutex);
 	        return;
 	    }
 	    shared->array[shared->counter]++;
