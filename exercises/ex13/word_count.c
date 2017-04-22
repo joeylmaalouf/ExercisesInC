@@ -23,30 +23,31 @@ typedef struct {
 } Pair;
 
 
-Pair *make_pair (gchar* word, gint freq) {
-    Pair *pair = g_new (Pair, 1);
-    // pair->word = g_strdup (word);
-    pair->word = word;
-    pair->freq = freq;
-    return pair;
-}
-
-
-void free_pair (gpointer key, gpointer value, gpointer user_data) {
-    Pair *p = (Pair *) value;
-    // if (p->word != NULL) {
-    //     g_free (p->word);
-    // }
-    g_free (p);
-}
-
-
 /* Compares two key-value pairs by frequency. */
 gint compare_pair (gpointer v1, gpointer v2, gpointer user_data)
 {
     Pair *p1 = (Pair *) v1;
     Pair *p2 = (Pair *) v2;
     return p1->freq - p2->freq;
+}
+
+
+void free_hash (gpointer key, gpointer value, gpointer user_data) {
+    char *word = (gchar *) key;
+    g_free (word);
+}
+
+
+void free_seq (gpointer value, gpointer user_data) {
+    Pair *pair = (Pair *) value;
+    g_free (pair);
+}
+
+
+/* Iterator that prints keys and values. */
+void printor (gpointer key, gpointer value, gpointer user_data)
+{
+  printf (user_data, key, * (gint *) value);
 }
 
 
@@ -58,20 +59,13 @@ void pair_printor (gpointer value, gpointer user_data)
 }
 
 
-/* Iterator that prints keys and values. */
-void printor (gpointer key, gpointer value, gpointer user_data)
-{
-    printf (user_data, key, * (gint *) value);
-}
-
-
 /* Iterator that add key-value pairs to a sequence. */
 void accumulator (gpointer key, gpointer value, gpointer user_data)
 {
-    gchar *word = (gchar *) key;
-    gint count = * (gint *) value;
-    Pair *pair = make_pair (word, count);
     GSequence *seq = (GSequence *) user_data;
+    Pair *pair = g_new (Pair, 1);
+    pair->word = (gchar *) key;
+    pair->freq = * (gint *) value;
     g_sequence_insert_sorted (seq,
                               (gpointer) pair,
                               (GCompareDataFunc) compare_pair,
@@ -141,8 +135,8 @@ int main (int argc, char** argv)
     g_sequence_foreach (seq, (GFunc) pair_printor, NULL);
 
     /* try to free everything */
-    g_hash_table_foreach (hash, (GHFunc) free_pair, NULL);
-    g_sequence_foreach (seq, (GFunc) free_pair, NULL);
+    g_hash_table_foreach (hash, (GHFunc) free_hash, NULL);
+    g_sequence_foreach (seq, (GFunc) free_seq, NULL);
     g_hash_table_destroy (hash);
     g_sequence_free (seq);
 
