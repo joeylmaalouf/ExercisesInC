@@ -23,8 +23,20 @@ typedef struct {
 } Pair;
 
 
+Pair *make_pair (gchar* word, gint freq) {
+    Pair *pair = g_new (Pair, 1);
+    // pair->word = g_strdup (word);
+    pair->word = word;
+    pair->freq = freq;
+    return pair;
+}
+
+
 void free_pair (gpointer key, gpointer value, gpointer user_data) {
     Pair *p = (Pair *) value;
+    // if (p->word != NULL) {
+    //     g_free (p->word);
+    // }
     g_free (p);
 }
 
@@ -56,11 +68,10 @@ void printor (gpointer key, gpointer value, gpointer user_data)
 /* Iterator that add key-value pairs to a sequence. */
 void accumulator (gpointer key, gpointer value, gpointer user_data)
 {
+    gchar *word = (gchar *) key;
+    gint count = * (gint *) value;
+    Pair *pair = make_pair (word, count);
     GSequence *seq = (GSequence *) user_data;
-    Pair *pair = g_new (Pair, 1);
-    pair->word = (gchar *) key;
-    pair->freq = * (gint *) value;
-
     g_sequence_insert_sorted (seq,
                               (gpointer) pair,
                               (GCompareDataFunc) compare_pair,
@@ -73,9 +84,10 @@ void incr (GHashTable* hash, gchar *key)
     gint *val = (gint *) g_hash_table_lookup (hash, key);
 
     if (val == NULL) {
+        gchar *key1 = g_strdup (key);
         gint *val1 = g_new (gint, 1);
         *val1 = 1;
-        g_hash_table_insert (hash, key, val1);
+        g_hash_table_insert (hash, key1, val1);
     } else {
         *val += 1;
     }
@@ -85,7 +97,7 @@ int main (int argc, char** argv)
 {
     gchar *filename;
 
-    // open the file
+    /* open the file */
     if (argc > 1) {
         filename = argv[1];
     } else {
@@ -98,14 +110,14 @@ int main (int argc, char** argv)
         exit (-10);
     }
 
-    /* string array is a (two-L) NULL terminated array of pointers to
-       (one-L) NUL terminated strings */
+    /* string array is a (two-L) NULL terminated array
+       of pointers to (one-L) NUL terminated strings */
     gchar **array;
     gchar line[128];
     GHashTable* hash = g_hash_table_new (g_str_hash, g_str_equal);
     int i;
 
-    // read lines from the file and build the hash table
+    /* read lines from the file and build the hash table */
     while (1) {
         gchar *res = fgets (line, sizeof(line), fp);
         if (res == NULL) break;
@@ -114,24 +126,24 @@ int main (int argc, char** argv)
         for (i=0; array[i] != NULL; i++) {
             incr (hash, array[i]);
         }
+        g_strfreev (array);
     }
     fclose (fp);
-    g_strfreev (array);
 
-    // iterate the hash table and build the sequence
+    /* iterate the hash table and build the sequence */
     GSequence *seq = g_sequence_new (NULL);
     g_hash_table_foreach (hash, (GHFunc) accumulator, (gpointer) seq);
 
-    // print the hash table
+    /* print the hash table */
     g_hash_table_foreach (hash, (GHFunc) printor, "Word %s freq %d\n");
 
-    // print the sequence
+    /* print the sequence */
     g_sequence_foreach (seq, (GFunc) pair_printor, NULL);
 
-    // try to free everything
+    /* try to free everything */
     g_hash_table_foreach (hash, (GHFunc) free_pair, NULL);
-    g_hash_table_destroy (hash);
     g_sequence_foreach (seq, (GFunc) free_pair, NULL);
+    g_hash_table_destroy (hash);
     g_sequence_free (seq);
 
     return 0;
