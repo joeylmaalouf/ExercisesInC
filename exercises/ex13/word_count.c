@@ -32,8 +32,10 @@ gint compare_pair (gpointer v1, gpointer v2, gpointer user_data) {
 
 
 void free_hash (gpointer key, gpointer value, gpointer user_data) {
-    char *word = (gchar *) key;
+    gchar *word = (gchar *) key;
+    gint *freq = (gint *) value;
     g_free (word);
+    g_free (freq);
 }
 
 
