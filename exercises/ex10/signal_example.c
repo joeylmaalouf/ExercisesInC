@@ -3,7 +3,7 @@
 Copyright 2014 Allen Downey
 License: MIT License
 
-Based on an example from 
+Based on an example from
 https://raw.githubusercontent.com/twcamper/head-first-c/master/10/math-master.c
 
 Based on an example in Head First C.
@@ -19,8 +19,9 @@ Based on an example in Head First C.
 #include <signal.h>
 
 int score = 0;
+int flag = 0;
 
-int catch_signal(int sig, void (*handler) (int)) {
+int catch_signal (int sig, void (*handler) (int)) {
     struct sigaction action;
     action.sa_handler = handler;
     sigemptyset(&action.sa_mask);
@@ -28,38 +29,47 @@ int catch_signal(int sig, void (*handler) (int)) {
     return sigaction(sig, &action, NULL);
 }
 
-void end_game(int sig)
-{
+void end_game (int sig) {
     printf("\nFinal score: %i\n", score);
     exit(EXIT_SUCCESS);
 }
 
-void times_up(int sig) {
+void times_up (int sig) {
     puts("\nTIME'S UP!");
-    raise(SIGINT);
+    // raise(SIGINT);
+    flag = 1;
 }
 
-int main(void) {
+int main (void) {
     int a, b, answer;
     char txt[4];
     catch_signal(SIGALRM, times_up);
-    catch_signal(SIGINT, end_game);
+    // catch_signal(SIGINT, end_game);
     srandom((unsigned int) time(NULL));
 
-    while(1) {
-	a = rand() % 11;
-	b = rand() % 11;
-	printf("\nWhat is %d times %d? ", a, b);
+    while (1) {
+        a = rand() % 11;
+        b = rand() % 11;
+        printf("\nWhat is %d times %d? ", a, b);
 
-	alarm(5);
-	fgets(txt, 4, stdin);
+        alarm(5);
 
-	answer = atoi(txt);
-	if (answer == a * b) {
-	    score++;
-	} else {
-	    printf("\nWrong! Score: %i\n", score);
-	}
+        while (1) {
+          char* ret = fgets(txt, 4, stdin);
+          if (ret) {
+            break;
+          }
+        }
+
+        answer = atoi(txt);
+        if (answer == a * b) {
+            score++;
+        } else {
+            printf("\nWrong! Score: %i\n", score);
+        }
+        if (flag == 1) {
+            end_game(0);
+        }
     }
     return 0;
 }
